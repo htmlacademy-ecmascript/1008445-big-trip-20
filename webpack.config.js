@@ -33,6 +33,9 @@ export default {
         rules: [
             {
                 test: /\.js$/,
+                resolve: {
+                    fullySpecified: false,
+                },
                 exclude: /(node_modules)/,
                 use: {
                     loader: 'babel-loader',
