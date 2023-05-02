@@ -13,7 +13,7 @@ const createOfferCheckboxTemplate = ({ title, price }) =>
   </div>`;
 const createOffersListCheckboxTemplate = (offers) => offers.map((offer) => createOfferCheckboxTemplate(offer)).join('');
 
-function createEditEventTemplate({ type, destanation, dateFrom, dateTo, price, offers }) {
+function createEditPointTemplate({ type, destanation, dateFrom, dateTo, price, offers }) {
   const typeTitle = capitalizeFirstLetter(type);
   const picturesTemplate = createPicturesTemplate(destanation);
   const picturesComponent = /*html*/`<div class="event__photos-container">
@@ -140,4 +140,4 @@ function createEditEventTemplate({ type, destanation, dateFrom, dateTo, price, o
     </li>`;
 }
 
-export { createEditEventTemplate };
+export { createEditPointTemplate };

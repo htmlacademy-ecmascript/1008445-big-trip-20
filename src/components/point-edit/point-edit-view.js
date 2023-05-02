@@ -1,5 +1,5 @@
 import { createElement } from '../../render.js';
-import { createEditEventTemplate } from './event-edit-template.js';
+import { createEditPointTemplate } from './point-edit-template.js';
 import { POINT_TYPE } from '../../const.js';
 
 const DEFAULT_POINT = {
@@ -38,13 +38,13 @@ const DEFAULT_POINT = {
   ],
 };
 
-export default class EditEventView {
+export default class EditPointView {
   constructor(point = DEFAULT_POINT) {
     this.point = point;
   }
 
   getTemplate() {
-    return createEditEventTemplate(this.point);
+    return createEditPointTemplate(this.point);
   }
 
   getElement() {

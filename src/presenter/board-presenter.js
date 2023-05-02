@@ -1,5 +1,5 @@
 import { render } from '../render.js';
-import EditEventView from '../components/point-edit/event-edit-view.js';
+import EditPointView from '../components/point-edit/point-edit-view.js';
 import PointListView from '../components/point-list/point-list-view.js';
 import PointView from '../components/point/point-view.js';
 import SortView from '../components/sort/sort-view.js';
@@ -18,7 +18,7 @@ export default class BoardPresenter {
     render(this.pointListComponent, this.container);
     this.points = [ ...this.pointModel.getPoints() ];
 
-    render(new EditEventView(this.points[0]), this.pointListComponent.getElement());
+    render(new EditPointView(this.points[0]), this.pointListComponent.getElement());
     for (let i = 1; i < this.points.length; i++) {
       render(new PointView({ point: this.points[i] }), this.pointListComponent.getElement());
     }
