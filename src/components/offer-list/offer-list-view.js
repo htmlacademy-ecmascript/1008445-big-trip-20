@@ -1,9 +1,9 @@
 import { createElement } from '../../render.js';
-import { createEventListTemplate } from './event-list-template.js';
+import { createOfferListTemplate } from './offer-list-template.js';
 
-export default class EventListView {
+export default class OfferListView {
   getTemplate() {
-    return createEventListTemplate();
+    return createOfferListTemplate();
   }
 
   getElement() {

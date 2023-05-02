@@ -1,9 +1,13 @@
 import { createElement } from '../../render.js';
-import { createEventTemplate } from './event-template.js';
+import { createPointTemplate } from './point-template.js';
 
-export default class EventView {
+export default class PointView {
+  constructor({ point }) {
+    this.point = point;
+  }
+
   getTemplate() {
-    return createEventTemplate();
+    return createPointTemplate(this.point);
   }
 
   getElement() {
