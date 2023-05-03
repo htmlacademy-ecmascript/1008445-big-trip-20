@@ -1,3 +1,14 @@
-const EVENT_COUNT = 9;
+const POINT_COUNT = 5;
+const POINT_TYPE = [
+  'taxi',
+  'bus',
+  'train',
+  'ship',
+  'drive',
+  'flight',
+  'check-in',
+  'sightseeing',
+  'restaurant'
+];
 
-export { EVENT_COUNT };
+export { POINT_COUNT, POINT_TYPE };
