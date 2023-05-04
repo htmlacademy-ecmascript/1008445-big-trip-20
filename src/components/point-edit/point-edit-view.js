@@ -1,6 +1,6 @@
-import { createElement } from '../../render.js';
 import { createEditPointTemplate } from './point-edit-template.js';
 import { POINT_TYPE } from '../../const.js';
+import AbstractView from '../../framework/view/abstract-view.js';
 
 const DEFAULT_POINT = {
   type: POINT_TYPE[5],
@@ -38,24 +38,29 @@ const DEFAULT_POINT = {
   ],
 };
 
-export default class EditPointView {
-  constructor(point = DEFAULT_POINT) {
-    this.point = point;
+export default class EditPointView extends AbstractView {
+  #point = null;
+  #hadleFormSumbit = null;
+
+  constructor({ point = DEFAULT_POINT, onFormSubmit }) {
+    super();
+    this.#point = point;
+    this.#hadleFormSumbit = onFormSubmit;
+    this.element
+      .querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
+
+    this.element
+      .querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#formSubmitHandler);
   }
 
-  getTemplate() {
-    return createEditPointTemplate(this.point);
+  get template() {
+    return createEditPointTemplate(this.#point);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#hadleFormSumbit();
+  };
 }
