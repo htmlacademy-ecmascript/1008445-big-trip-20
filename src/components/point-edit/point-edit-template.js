@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter, humanizePointDateAndTime } from '../../utils';
+import { capitalizeFirstLetter, humanizePointDateAndTime } from '../../utils/point.js';
 
 const createPictureTemplate = ({ src }) => /*html*/`<img class="event__photo" src="${ src }" alt="Event photo">`;
 const createPicturesTemplate = ({ pictures }) => pictures.map((picture) => createPictureTemplate(picture)).join('');

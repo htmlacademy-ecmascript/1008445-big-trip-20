@@ -1,4 +1,4 @@
-import { humanizePointDate, humanizePointTime, capitalizeFirstLetter } from '../../utils';
+import { humanizePointDate, humanizePointTime, capitalizeFirstLetter } from '../../utils/point.js';
 import { createOfferListTemplate } from '../offer-list/offer-list-template';
 import dayjs from 'dayjs';
 

@@ -1,5 +1,5 @@
-import { POINT_TYPE } from '../const';
-import { getRandomArrayElement } from '../utils';
+import { POINT_TYPE } from '../const.js';
+import { getRandomArrayElement } from '../utils/utils.js';
 
 const mockPoints = [
   {
@@ -14,8 +14,8 @@ const mockPoints = [
         }
       ]
     },
-    dateFrom: '2023-03-18T10:30:00',
-    dateTo: '2023-03-18T11:00:00',
+    dateFrom: '2023-05-5T10:30:00',
+    dateTo: '2023-05-5T11:00:00',
     isFavorite: true,
     price: 20,
     offers: [
@@ -37,8 +37,8 @@ const mockPoints = [
         }
       ]
     },
-    dateFrom: '2023-03-18T12:25:00',
-    dateTo: '2023-03-18T13:35:00',
+    dateFrom: '2023-05-06T12:25:00',
+    dateTo: '2023-05-06T13:35:00',
     isFavorite: false,
     price: 160,
     offers: [
@@ -64,8 +64,8 @@ const mockPoints = [
         }
       ]
     },
-    dateFrom: '2023-03-18T14:30:00',
-    dateTo: '2023-03-18T16:05:00',
+    dateFrom: '2023-05-06T14:30:00',
+    dateTo: '2023-05-06T16:05:00',
     isFavorite: false,
     price: 160,
     offers: [
@@ -87,8 +87,8 @@ const mockPoints = [
         }
       ]
     },
-    dateFrom: '2023-03-18T16:20:00',
-    dateTo: '2023-03-18T17:00:00',
+    dateFrom: '2023-05-01T16:20:00',
+    dateTo: '2023-05-01T17:00:00',
     isFavorite: true,
     price: 600,
     offers: [
@@ -110,8 +110,8 @@ const mockPoints = [
         }
       ]
     },
-    dateFrom: '2023-03-19T13:00:00',
-    dateTo: '2023-03-19T14:20:00',
+    dateFrom: '2023-05-07T13:00:00',
+    dateTo: '2023-05-07T14:20:00',
     isFavorite: false,
     price: 50,
     offers: [
