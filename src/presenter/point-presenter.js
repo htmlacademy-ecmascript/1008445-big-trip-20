@@ -24,13 +24,6 @@ export default class PointPresenter {
     this.#handleModeChange = onModeChange;
   }
 
-  #escKeyDownHandler = (evt) => {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
-      this.#replaceFormToPoint();
-    }
-  };
-
   init(point) {
     this.#point = point;
     const prevPointComponent = this.#pointComponent;
@@ -64,6 +57,26 @@ export default class PointPresenter {
     remove(prevPointEditComponent);
   }
 
+  #escKeyDownHandler = (evt) => {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      this.#replaceFormToPoint();
+    }
+  };
+
+  #handleEditClick = () => {
+    this.#replacePointToForm();
+  };
+
+  #handleFormSubmit = (point) => {
+    this.#handleDataChange(point);
+    this.#replaceFormToPoint();
+  };
+
+  #handleFavoriteClick = () => {
+    this.#handleDataChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
+  };
+
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
       this.#replaceFormToPoint();
@@ -88,16 +101,4 @@ export default class PointPresenter {
     this.#mode = Mode.DEFAULT;
   }
 
-  #handleEditClick = () => {
-    this.#replacePointToForm();
-  };
-
-  #handleFormSubmit = (point) => {
-    this.#handleDataChange(point);
-    this.#replaceFormToPoint();
-  };
-
-  #handleFavoriteClick = () => {
-    this.#handleDataChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
-  };
 }

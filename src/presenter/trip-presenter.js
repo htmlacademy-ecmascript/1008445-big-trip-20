@@ -8,16 +8,16 @@ import { SortType } from '../const.js';
 import { sortByDay, sortByDurationTime, sortByPrice } from '../utils/point.js';
 
 export default class TripPresenter {
-  #tripBodyContainer = null;
-  #sortComponent = null;
-  #pointModel = null;
-  #pointPresenters = new Map();
-
   #points = [];
   #currentSortType = SortType.DAY;
+  #pointPresenters = new Map();
+
+  #pointModel = null;
 
   #pointListComponent = new PointListView();
   #noPointComponent = new NoPointView();
+  #tripBodyContainer = null;
+  #sortComponent = null;
 
   constructor({ tripBodyContainer, pointModel }) {
     this.#tripBodyContainer = tripBodyContainer;
@@ -26,7 +26,7 @@ export default class TripPresenter {
 
   init() {
     this.#points = [ ...this.#pointModel.points ];
-    this.#points.sort(sortByDay);
+    this.#sortPoints(this.#currentSortType);
     this.#renderTrip();
   }
 
@@ -60,43 +60,11 @@ export default class TripPresenter {
     this.#renderPoints();
   }
 
-  #renderPoint(point) {
-    const pointPresenter = new PointPresenter({
-      pointListContainer: this.#pointListComponent.element,
-      onDataChange: this.#handlePointChange,
-      onModeChange: this.#handleModeChange
-    });
-
-    pointPresenter.init(point);
-    this.#pointPresenters.set(point.id, pointPresenter);
-  }
-
   #renderSort() {
     this.#sortComponent = new SortView({
       onSortTypeChange: this.#handleSortTypeChange
     });
     render(this.#sortComponent, this.#tripBodyContainer);
-  }
-
-  #renderPoints() {
-    for (let i = 0; i < this.#points.length; i++) {
-      this.#renderPoint(this.#points[i]);
-    }
-  }
-
-  #renderNoPoint() {
-    if (!this.#points.length) {
-      render(this.#noPointComponent, this.#tripBodyContainer);
-    }
-  }
-
-  #renderPointList() {
-    render(this.#pointListComponent, this.#tripBodyContainer);
-  }
-
-  #clearPoints() {
-    this.#pointPresenters.forEach((presenter) => presenter.destroy());
-    this.#pointPresenters.clear();
   }
 
   #sortPoints(sortType) {
@@ -111,5 +79,37 @@ export default class TripPresenter {
     }
 
     this.#currentSortType = sortType;
+  }
+
+  #renderPointList() {
+    render(this.#pointListComponent, this.#tripBodyContainer);
+  }
+
+  #renderPoints() {
+    for (let i = 0; i < this.#points.length; i++) {
+      this.#renderPoint(this.#points[i]);
+    }
+  }
+
+  #renderPoint(point) {
+    const pointPresenter = new PointPresenter({
+      pointListContainer: this.#pointListComponent.element,
+      onDataChange: this.#handlePointChange,
+      onModeChange: this.#handleModeChange
+    });
+
+    pointPresenter.init(point);
+    this.#pointPresenters.set(point.id, pointPresenter);
+  }
+
+  #renderNoPoint() {
+    if (!this.#points.length) {
+      render(this.#noPointComponent, this.#tripBodyContainer);
+    }
+  }
+
+  #clearPoints() {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
   }
 }
