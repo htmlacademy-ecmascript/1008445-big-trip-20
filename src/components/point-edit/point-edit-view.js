@@ -61,6 +61,6 @@ export default class EditPointView extends AbstractView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#hadleFormSumbit();
+    this.#hadleFormSumbit(this.#point);
   };
 }

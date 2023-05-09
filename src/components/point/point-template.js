@@ -1,15 +1,13 @@
 import { humanizePointDate, humanizePointTime, capitalizeFirstLetter } from '../../utils/point.js';
 import { createOfferListTemplate } from '../offer-list/offer-list-template';
-import dayjs from 'dayjs';
+import { getDuration } from '../../utils/point.js';
 
 function createPointTemplate({ type, destanation, dateFrom, dateTo, price, offers, isFavorite }) {
   const typeTitle = capitalizeFirstLetter(type);
   const date = humanizePointDate(dateFrom);
   const timeFrom = humanizePointTime(dateFrom);
   const timeTo = humanizePointTime(dateTo);
-  const minutes = dayjs(dateTo).diff(dayjs(dateFrom), 'minute');
-  const hourDuration = parseInt(minutes / 60, 10);
-  const minuteDuration = dayjs().minute(minutes).$m;
+  const { hourDuration, minuteDuration } = getDuration(dateFrom, dateTo);
   const duration = `${ hourDuration ? `${ hourDuration }H` : ''} ${ minuteDuration}M`;
   const favoriteClassName = isFavorite ? 'event__favorite-btn--active' : '';
   const offerListTemplate = offers ? createOfferListTemplate(offers) : '';
