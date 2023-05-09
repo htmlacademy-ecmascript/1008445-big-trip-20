@@ -1,8 +1,10 @@
 import { POINT_TYPE } from '../const.js';
 import { getRandomArrayElement } from '../utils/utils.js';
+import { nanoid } from 'nanoid';
 
 const mockPoints = [
   {
+    id: nanoid(),
     type: getRandomArrayElement(POINT_TYPE),
     destanation: {
       name: 'Amsterdam',
@@ -14,8 +16,8 @@ const mockPoints = [
         }
       ]
     },
-    dateFrom: '2023-05-5T10:30:00',
-    dateTo: '2023-05-5T11:00:00',
+    dateFrom: '2023-05-05T10:30:00',
+    dateTo: '2023-05-05T11:00:00',
     isFavorite: true,
     price: 20,
     offers: [
@@ -26,6 +28,7 @@ const mockPoints = [
     ],
   },
   {
+    id: nanoid(),
     type: getRandomArrayElement(POINT_TYPE),
     destanation: {
       name: 'Chamonix',
@@ -53,6 +56,7 @@ const mockPoints = [
     ],
   },
   {
+    id: nanoid(),
     type: getRandomArrayElement(POINT_TYPE),
     destanation: {
       name: 'Chamonix',
@@ -76,6 +80,7 @@ const mockPoints = [
     ],
   },
   {
+    id: nanoid(),
     type: getRandomArrayElement(POINT_TYPE),
     destanation: {
       name: 'Chamonix',
@@ -99,6 +104,7 @@ const mockPoints = [
     ],
   },
   {
+    id: nanoid(),
     type: getRandomArrayElement(POINT_TYPE),
     destanation: {
       name: 'Chamonix',
@@ -129,4 +135,4 @@ const mockPoints = [
 
 const getRandomPoints = () => getRandomArrayElement(mockPoints);
 
-export { getRandomPoints };
+export { getRandomPoints, mockPoints };
