@@ -1,6 +1,7 @@
 import { capitalizeFirstLetter, humanizePointDateAndTime } from '../../utils/point.js';
+import { POINT_TYPE } from '../../const.js';
 
-const createPictureTemplate = ({ src }) => /*html*/`<img class="event__photo" src="${ src }" alt="Event photo">`;
+const createPictureTemplate = ({ src }) => `<img class="event__photo" src="${ src }" alt="Event photo">`;
 const createPicturesTemplate = ({ pictures }) => pictures.map((picture) => createPictureTemplate(picture)).join('');
 const createOfferCheckboxTemplate = ({ title, price }) =>
   /*html*/`<div class="event__offer-selector">
@@ -11,20 +12,18 @@ const createOfferCheckboxTemplate = ({ title, price }) =>
       <span class="event__offer-price">${ price }</span>
     </label>
   </div>`;
-const createOffersListCheckboxTemplate = (offers) => offers.map((offer) => createOfferCheckboxTemplate(offer)).join('');
+const createOffersListCheckboxTemplate = ({ offers }) => offers.map((offer) => createOfferCheckboxTemplate(offer)).join('');
+const createPointTypeItemTemplate = (type) => `<div class="event__type-item">
+  <input id="event-type-${ type }-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${ type }">
+  <label class="event__type-label  event__type-label--${ type }" for="event-type-${ type }-1">${ capitalizeFirstLetter(type) }</label>
+  </div>`;
+const createPointTypeListTemplate = () => POINT_TYPE.map((type) => createPointTypeItemTemplate(type)).join('');
 
 function createEditPointTemplate({ type, destanation, dateFrom, dateTo, price, offers }) {
   const typeTitle = capitalizeFirstLetter(type);
   const picturesTemplate = createPicturesTemplate(destanation);
-  const picturesComponent = /*html*/`<div class="event__photos-container">
-    <div class="event__photos-tape">
-      ${ picturesTemplate }
-    </div>
-  </div>`;
   const offersListCheckboxTemplate = createOffersListCheckboxTemplate(offers);
-  const offersListComponent = /*html*/`<div class="event__available-offers">
-    ${ offersListCheckboxTemplate }
-    </div>`;
+  const pointTypeListTemplate = createPointTypeListTemplate();
 
   return /*html*/`<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -39,51 +38,7 @@ function createEditPointTemplate({ type, destanation, dateFrom, dateTo, price, o
           <div class="event__type-list">
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Event type</legend>
-
-              <div class="event__type-item">
-                <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-                <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-                <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-                <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-                <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-                <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-                <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-                <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-                <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-                <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-              </div>
+              ${ pointTypeListTemplate }
             </fieldset>
           </div>
         </div>
@@ -125,15 +80,15 @@ function createEditPointTemplate({ type, destanation, dateFrom, dateTo, price, o
       <section class="event__details">
         <section class="event__section  event__section--offers">
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-          ${ offersListComponent }
+          <div class="event__available-offers">${ offersListCheckboxTemplate }</div>
         </section>
 
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${ destanation.description }</p>
-
-          ${ picturesComponent }
+          <div class="event__photos-container">
+          <div class="event__photos-tape">${ picturesTemplate }</div>        
+        </div>
         </section>
       </section>
     </form>
