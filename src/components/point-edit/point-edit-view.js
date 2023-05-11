@@ -4,6 +4,7 @@ import AbstractStatefulView from '../../framework/view/abstract-stateful-view.js
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import { mockDestanations, mockOffers } from '../../mock/points.js';
+import { humanizePointDateAndTime, setDefaultPointDateAndTime } from '../../utils/point.js';
 
 const DEFAULT_POINT = {
   type: POINT_TYPE[0],
@@ -42,9 +43,16 @@ const DEFAULT_POINT = {
 };
 
 export default class EditPointView extends AbstractStatefulView {
-  #datepicker = null;
+  #dateFromPicker = null;
+  #dateToPicker = null;
   #hadleFormSumbit = null;
   #hadleFormRollup = null;
+  #datePickerConfig = {
+    dateFormat: 'd/m/y H:i',
+    enableTime: true,
+    // eslint-disable-next-line camelcase
+    time_24hr: true
+  };
 
   constructor({ point = DEFAULT_POINT, onFormSubmit, onFormRollup }) {
     super();
@@ -65,9 +73,13 @@ export default class EditPointView extends AbstractStatefulView {
   removeElement() {
     super.removeElement();
 
-    if (this.#datepicker) {
-      this.#datepicker.destroy();
-      this.#datepicker = null;
+    if (this.#dateFromPicker) {
+      this.#dateFromPicker.destroy();
+      this.#dateFromPicker = null;
+    }
+    if (this.#dateToPicker) {
+      this.#dateToPicker.destroy();
+      this.#dateToPicker = null;
     }
   }
 
@@ -140,18 +152,34 @@ export default class EditPointView extends AbstractStatefulView {
 
   #dateFromChangeHandler = ([ userDateFrom ]) => {
     this.updateElement({
-      dateFrom: userDateFrom
+      dateFrom: setDefaultPointDateAndTime(userDateFrom)
+    });
+  };
+
+  #dateToChangeHandler = ([ userDateTo ]) => {
+    this.updateElement({
+      dateTo: setDefaultPointDateAndTime(userDateTo)
     });
   };
 
   #setDatePicker() {
     if (this._state.dateFrom) {
-      this.#datepicker = flatpickr(
+      this.#dateFromPicker = flatpickr(
         this.element.querySelector('input[name="event-start-time"]'),
         {
-          dateFormat: 'j F',
-          defaultDate: this._state.dateFrom,
+          ...this.#datePickerConfig,
+          defaultDate: humanizePointDateAndTime(this._state.dateFrom),
           onChange: this.#dateFromChangeHandler
+        }
+      );
+    }
+    if (this._state.dateTo) {
+      this.#dateToPicker = flatpickr(
+        this.element.querySelector('input[name="event-end-time"]'),
+        {
+          ...this.#datePickerConfig,
+          defaultDate: humanizePointDateAndTime(this._state.dateTo),
+          onChange: this.#dateToChangeHandler
         }
       );
     }
