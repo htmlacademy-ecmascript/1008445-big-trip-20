@@ -222,8 +222,8 @@ const mockPoints = [
     id: nanoid(),
     type: POINT_TYPE[5],
     destanation: getRandomArrayElement(mockDestanations),
-    dateFrom: '2023-05-07T13:00:00',
-    dateTo: '2023-05-07T14:20:00',
+    dateFrom: '2023-05-12T13:00:00',
+    dateTo: '2023-05-12T14:20:00',
     isFavorite: false,
     price: 50,
     offers: mockOffers.find((offer) => offer.type === POINT_TYPE[0]),
@@ -232,13 +232,13 @@ const mockPoints = [
     id: nanoid(),
     type: POINT_TYPE[6],
     destanation: getRandomArrayElement(mockDestanations),
-    dateFrom: '2023-05-07T13:00:00',
-    dateTo: '2023-05-07T14:20:00',
+    dateFrom: '2023-05-15T13:00:00',
+    dateTo: '2023-05-15T14:20:00',
     isFavorite: false,
     price: 50,
     offers: mockOffers.find((offer) => offer.type === POINT_TYPE[0]),
   }
 ];
-const getRandomPoints = () => getRandomArrayElement(mockPoints);
+const getRandomPoint = () => getRandomArrayElement(mockPoints);
 
-export { getRandomPoints, mockPoints, mockDestanations, mockOffers };
+export { getRandomPoint, mockPoints, mockDestanations, mockOffers };

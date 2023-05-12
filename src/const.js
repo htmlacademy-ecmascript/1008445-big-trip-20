@@ -17,11 +17,21 @@ const FilterType = {
   PAST: 'past',
 };
 const SortType = {
-  DAY: 'day',
+  DEFAULT: 'day',
   EVENT: 'event',
   DURATION_TIME: 'time',
   PRICE: 'price',
   OFFERS: 'offers',
 };
+const UserAction = {
+  UPDATE_POINT: 'update',
+  ADD_POINT: 'add_point',
+  DELETE_POINT: 'delete_point'
+};
+const UpdateType = {
+  PATCH: 'patch',
+  MINOR: 'minor',
+  MAJOR: 'major',
+};
 
-export { POINT_COUNT, POINT_TYPE, FilterType, SortType };
+export { POINT_COUNT, POINT_TYPE, FilterType, SortType, UserAction, UpdateType };
