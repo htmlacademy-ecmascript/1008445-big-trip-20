@@ -4,42 +4,17 @@ import AbstractStatefulView from '../../framework/view/abstract-stateful-view.js
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import { mockDestanations, mockOffers } from '../../mock/points.js';
+import { getRandomArrayElement } from '../../utils/utils.js';
 import { humanizePointDateAndTime, setDefaultPointDateAndTime } from '../../utils/point.js';
 
 const DEFAULT_POINT = {
-  type: POINT_TYPE[0],
-  destanation: {
-    name: 'Las Vegas',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra.',
-    pictures: [
-      {
-        src: 'https://loremflickr.com/248/152?random=4',
-        description: 'Lorem ipsum dolor sit amet,'
-      },
-      {
-        src: 'https://loremflickr.com/248/152?random=5',
-        description: 'Lorem ipsum dolor sit amet,'
-      }
-    ]
-  },
-  dateFrom: '2023-03-19T19:00:00',
-  dateTo: '2023-03-19T20:20:00',
+  type: POINT_TYPE[6],
+  destanation: getRandomArrayElement(mockDestanations),
+  dateFrom: '2023-05-12T13:00:00',
+  dateTo: '2023-05-12T14:20:00',
   isFavorite: false,
-  price: 100,
-  offers: [
-    {
-      title: 'Add luggage',
-      price: 30,
-    },
-    {
-      title: 'Switch to comfort class',
-      price: 100,
-    },
-    {
-      title: 'Add meal',
-      price: 15,
-    },
-  ],
+  price: 0,
+  offers: mockOffers.find((offer) => offer.type === POINT_TYPE[0]),
 };
 
 export default class EditPointView extends AbstractStatefulView {
@@ -47,6 +22,7 @@ export default class EditPointView extends AbstractStatefulView {
   #dateToPicker = null;
   #hadleFormSumbit = null;
   #hadleFormRollup = null;
+  #onDeleteClick = null;
   #datePickerConfig = {
     dateFormat: 'd/m/y H:i',
     enableTime: true,
@@ -54,11 +30,12 @@ export default class EditPointView extends AbstractStatefulView {
     time_24hr: true
   };
 
-  constructor({ point = DEFAULT_POINT, onFormSubmit, onFormRollup }) {
+  constructor({ point = DEFAULT_POINT, onFormSubmit, onFormRollup, onDeleteClick }) {
     super();
     this._setState(EditPointView.parsePointToState(point));
     this.#hadleFormSumbit = onFormSubmit;
     this.#hadleFormRollup = onFormRollup;
+    this.#onDeleteClick = onDeleteClick;
     this._restoreHandlers();
   }
 
@@ -101,8 +78,12 @@ export default class EditPointView extends AbstractStatefulView {
       .addEventListener('click', this.#pointTypeHandler);
 
     this.element
-      .querySelector('.event__input--destination')
+      .querySelector('.event__select--destination')
       .addEventListener('change', this.#destanationHandler);
+
+    this.element
+      .querySelector('.event__reset-btn')
+      .addEventListener('click', this.#deleteHandler);
 
     this.#setDatePicker();
   }
@@ -119,9 +100,18 @@ export default class EditPointView extends AbstractStatefulView {
 
   #priceHandler = (evt) => {
     evt.preventDefault();
+    const value = evt.target.value;
+    if (value) {
+      evt.target.value = value.replace(/\D/g, '');
+    }
     this._setState({
       price: evt.target.value
     });
+  };
+
+  #deleteHandler = (evt) => {
+    evt.preventDefault();
+    this.#onDeleteClick(EditPointView.parseStateToPoint(this._state));
   };
 
   #pointTypeHandler = (evt) => {
@@ -141,7 +131,6 @@ export default class EditPointView extends AbstractStatefulView {
   };
 
   #destanationHandler = (evt) => {
-    evt.preventDefault();
     const destanation = mockDestanations.find((dest) => dest.name === evt.target.value);
     if (destanation) {
       this.updateElement({

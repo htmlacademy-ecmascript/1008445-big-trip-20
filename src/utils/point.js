@@ -19,6 +19,7 @@ const getDuration = (dateFrom, dateTo) => {
   const minuteDuration = dayjs().minute(minutes).$m;
   return { hourDuration, minuteDuration };
 };
+const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
 const sortByDay = (pointA, pointB) => {
   const dateA = dayjs(pointA.dateFrom);
   const dateB = dayjs(pointB.dateFrom);
@@ -42,5 +43,6 @@ export {
   sortByDay,
   sortByDurationTime,
   sortByPrice,
-  setDefaultPointDateAndTime
+  setDefaultPointDateAndTime,
+  isDatesEqual
 };
