@@ -15,9 +15,13 @@ const isPresentPoint = (date) => date && dayjs().isSame(date, 'D');
 const getDatesDiff = (dateFrom, dateTo, timeUnit) => timeUnit ? dayjs(dateTo).diff(dayjs(dateFrom), timeUnit) : dayjs(dateTo).diff(dayjs(dateFrom));
 const getDuration = (dateFrom, dateTo) => {
   const minutes = getDatesDiff(dateFrom, dateTo, 'minute');
-  const hourDuration = parseInt(minutes / 60, 10);
+  let hourDuration = parseInt(minutes / 60, 10);
+  const dayDuration = parseInt(hourDuration / 24, 10);
+  if (dayDuration) {
+    hourDuration = hourDuration - dayDuration * 24;
+  }
   const minuteDuration = dayjs().minute(minutes).$m;
-  return { hourDuration, minuteDuration };
+  return { dayDuration, hourDuration, minuteDuration };
 };
 const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
 const sortByDay = (pointA, pointB) => {

@@ -1,17 +1,20 @@
 import { humanizePointDate, humanizePointTime, capitalizeFirstLetter } from '../../utils/point.js';
-import { createOfferListTemplate } from '../offer-list/offer-list-template';
+import { createOffersListTemplate } from '../offer-list/offer-list-template.js';
 import { getDuration } from '../../utils/point.js';
 
-function createPointTemplate({ type, destanation, dateFrom, dateTo, price, offers, isFavorite }) {
+function createPointTemplate({ type, destination, dateFrom, dateTo, price, offers, isFavorite }) {
   const typeTitle = capitalizeFirstLetter(type);
   const date = humanizePointDate(dateFrom);
   const timeFrom = humanizePointTime(dateFrom);
   const timeTo = humanizePointTime(dateTo);
-  const { hourDuration, minuteDuration } = getDuration(dateFrom, dateTo);
-  const duration = `${ hourDuration ? `${ hourDuration }H` : ''} ${ minuteDuration}M`;
+  const { dayDuration, hourDuration, minuteDuration } = getDuration(dateFrom, dateTo);
+  const pointDayDuration = dayDuration ? `${ dayDuration }D` : '';
+  const pointHourDuration = hourDuration ? `${ hourDuration }H` : '';
+  const pointMinuteDuration = minuteDuration ? `${ minuteDuration }M` : '';
+  const duration = `${ pointDayDuration } ${ pointHourDuration } ${ pointMinuteDuration }`;
   const favoriteClassName = isFavorite ? 'event__favorite-btn--active' : '';
-  const offerListTemplate = offers ? createOfferListTemplate(offers) : '';
-  const { name } = destanation;
+  const offerListTemplate = offers ? createOffersListTemplate(offers) : '';
+  const { name } = destination;
 
   return /*html*/`<li class="trip-events__item">
   <div class="event">

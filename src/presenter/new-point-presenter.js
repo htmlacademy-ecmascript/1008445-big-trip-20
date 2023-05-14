@@ -5,23 +5,31 @@ import EditPointView from '../components/point-edit/point-edit-view.js';
 import { nanoid } from 'nanoid';
 
 export default class NewPointPresenter {
+  #destinations = null;
+  #offers = null;
+
   #pointListContainer = null;
   #handleDataChange = null;
   #handleDestroy = null;
   #editPointComponent = null;
 
-  constructor({ pointListContainer, onDataChange, onDestroy }) {
+  constructor({ pointListContainer, onDataChange, onDestroy}) {
     this.#pointListContainer = pointListContainer;
     this.#handleDataChange = onDataChange;
     this.#handleDestroy = onDestroy;
   }
 
-  init() {
+  init(destinations, offers) {
     if (this.#editPointComponent) {
       return;
     }
 
+    this.#destinations = destinations;
+    this.#offers = offers;
+
     this.#editPointComponent = new EditPointView({
+      destinations: this.#destinations,
+      offers: this.#offers,
       onFormSubmit: this.#handleFormSubmit,
       onDeleteClick: this.#handleDeleteClick,
     });
