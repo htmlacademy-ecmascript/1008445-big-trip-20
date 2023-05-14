@@ -1,38 +1,26 @@
 import { capitalizeFirstLetter, humanizePointDateAndTime } from '../../utils/point.js';
-import { POINT_TYPE } from '../../const.js';
-import { mockDestanations } from '../../mock/points.js';
-import he from 'he';
+import { createDestinationSectionTemplate } from './pictures-template.js';
+import { createOffersSectionTemplate } from './offers-list-template.js';
+import { createDistinationTempate } from './destination-template.js';
+import { createPointTypeListTemplate } from './point-items-template.js';
 
-const createPictureTemplate = ({ src }) => `<img class="event__photo" src="${ src }" alt="Event photo">`;
-const createPicturesTemplate = ({ pictures }) => pictures.map((picture) => createPictureTemplate(picture)).join('');
-const createOfferCheckboxTemplate = ({ title, price }) =>
-  /*html*/`<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-    <label class="event__offer-label" for="event-offer-seats-1">
-      <span class="event__offer-title">${ title }</span>
-      &plus;&euro;&nbsp;
-      <span class="event__offer-price">${ price }</span>
-    </label>
-  </div>`;
-const createOffersListCheckboxTemplate = ({ offers }) => offers.map((offer) => createOfferCheckboxTemplate(offer)).join('');
-const createPointTypeItemTemplate = (type) => `<div class="event__type-item">
-  <input id="event-type-${ type }-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${ type }">
-  <label class="event__type-label  event__type-label--${ type }" for="event-type-${ type }-1">${ capitalizeFirstLetter(type) }</label>
-  </div>`;
-const createPointTypeListTemplate = () => POINT_TYPE.map((type) => createPointTypeItemTemplate(type)).join('');
-const createPointDestanationOptionTemplate = (destanationName, currentName) =>
-  /*html*/`<option value="${ destanationName }" ${ currentName === destanationName ? 'selected' : '' }>  
-    ${ destanationName }
-  </option>`;
-const createPointDestanationOptionsTemplate = (currentName) => mockDestanations.map((destanation) => createPointDestanationOptionTemplate(destanation.name, currentName)).join('');
-
-function createEditPointTemplate({ type, destanation, dateFrom, dateTo, price, offers }) {
+function createEditPointTemplate({ type, destination, dateFrom, dateTo, price, offers }, destinations) {
+  let destinationSectionTemplate = '';
+  let offersSectionTemplate = '';
+  let destinationName = '';
   const typeTitle = capitalizeFirstLetter(type);
-  const picturesTemplate = createPicturesTemplate(destanation);
-  const offersListCheckboxTemplate = createOffersListCheckboxTemplate(offers);
   const pointTypeListTemplate = createPointTypeListTemplate();
-  const { name, description } = destanation;
-  const pointDestanationOptionsTemplate = createPointDestanationOptionsTemplate(name);
+  if (destination) {
+    const { name, description, pictures } = destination;
+    destinationName = name;
+    destinationSectionTemplate = createDestinationSectionTemplate(description, pictures);
+  } else {
+    destinationSectionTemplate = '';
+  }
+  const pointDestinationTemplate = createDistinationTempate(destinationName, destinations);
+  if (offers.length) {
+    offersSectionTemplate = createOffersSectionTemplate(offers);
+  }
 
   return /*html*/`<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -56,9 +44,7 @@ function createEditPointTemplate({ type, destanation, dateFrom, dateTo, price, o
           <label class="event__label  event__type-output" for="event-destination-1">
             ${ typeTitle }
           </label>
-          <select class="event__input  event__select--destination" id="event-destination-1" type="text" name="event-destination">
-            ${ pointDestanationOptionsTemplate }
-          </select>
+          ${ pointDestinationTemplate }
         </div>
 
         <div class="event__field-group  event__field-group--time">
@@ -83,19 +69,10 @@ function createEditPointTemplate({ type, destanation, dateFrom, dateTo, price, o
           <span class="visually-hidden">Open event</span>
         </button>
       </header>
-      <section class="event__details">
-        <section class="event__section  event__section--offers">
-          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-          <div class="event__available-offers">${ offersListCheckboxTemplate }</div>
-        </section>
 
-        <section class="event__section  event__section--destination">
-          <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-          <p class="event__destination-description">${ he.encode(description) }</p>
-          <div class="event__photos-container">
-          <div class="event__photos-tape">${ picturesTemplate }</div>        
-        </div>
-        </section>
+      <section class="event__details">
+        ${ offersSectionTemplate }
+        ${ destinationSectionTemplate }
       </section>
     </form>
     </li>`;

@@ -661,9 +661,9 @@ main {
      -moz-appearance: none;
           appearance: none;
   border: none; }
-  .event__select--destination {
+  .event__input--destination {
     width: 150px; }
-    .event__select--destination::-webkit-calendar-picker-indicator {
+    .event__input--destination::-webkit-calendar-picker-indicator {
       display: none; }
   .event__input--time {
     width: 130px;
