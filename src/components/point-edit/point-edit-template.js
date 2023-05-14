@@ -14,8 +14,6 @@ function createEditPointTemplate({ type, destination, dateFrom, dateTo, price, o
     const { name, description, pictures } = destination;
     destinationName = name;
     destinationSectionTemplate = createDestinationSectionTemplate(description, pictures);
-  } else {
-    destinationSectionTemplate = '';
   }
   const pointDestinationTemplate = createDistinationTempate(destinationName, destinations);
   if (offers.length) {
