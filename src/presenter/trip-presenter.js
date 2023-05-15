@@ -8,12 +8,21 @@ import LoadingView from '../components/loading/loading-view.js';
 import { FilterType, SortType, UpdateType, UserAction } from '../const.js';
 import { sortByDay, sortByDurationTime, sortByPrice } from '../utils/point.js';
 import { filter } from '../utils/filter.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000
+};
 export default class TripPresenter {
   #currentSortType = SortType.DEFAULT;
   #filterType = FilterType.EVERYTHING;
   #pointPresenters = new Map();
   #isLoading = true;
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
+  });
 
   #newPointPresenter = null;
 
@@ -67,18 +76,38 @@ export default class TripPresenter {
     this.#renderTrip();
   }
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
+    //this.#uiBlocker.block();
+
     switch(actionType) {
       case UserAction.UPDATE_POINT:
-        this.#pointModel.updatedPoint(updateType, update);
+        console.log('updatePoint');
+        this.#pointPresenters.get(update.id).setSaving();
+        try {
+          await this.#pointModel.updatedPoint(updateType, update);
+        } catch (error) {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
         break;
       case UserAction.ADD_POINT:
-        this.#pointModel.addPoint(updateType, update);
+        this.#newPointPresenter.setSaving();
+        try {
+          await this.#pointModel.addPoint(updateType, update);
+        } catch (error) {
+          this.#newPointPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_POINT:
-        this.#pointModel.deletePoint(updateType, update);
+        this.#pointPresenters.get(update.id).setDeleting();
+        try {
+          await this.#pointModel.deletePoint(updateType, update);
+        } catch (error) {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
         break;
     }
+
+    //this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
@@ -91,8 +120,8 @@ export default class TripPresenter {
         this.#renderTrip();
         break;
       case UpdateType.MAJOR:
-        this.#clearTrip();
-        this.#renderTrip({ resetSortType: true });
+        this.#clearTrip({ resetSortType: true });
+        this.#renderTrip();
         break;
       case UpdateType.INIT:
         this.#isLoading = false;

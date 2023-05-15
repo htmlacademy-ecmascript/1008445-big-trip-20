@@ -1,6 +1,5 @@
 function createFilterItemTemplate(filter, currentFilterType) {
-  const { type } = filter;
-  //count to disable
+  const { type, count } = filter;
   return /*html*/`<div class="trip-filters__filter">
     <input 
       id="filter-${ type }"
@@ -9,6 +8,7 @@ function createFilterItemTemplate(filter, currentFilterType) {
       name="trip-filter"
       value="${ type }"
       ${ type === currentFilterType ? 'checked' : '' }  
+      ${ count === 0 ? 'disabled' : '' }  
     >
     <label class="trip-filters__filter-label" for="filter-${ type }">${ type }</label>
     </div>`;
