@@ -77,11 +77,10 @@ export default class TripPresenter {
   }
 
   #handleViewAction = async (actionType, updateType, update) => {
-    //this.#uiBlocker.block();
+    this.#uiBlocker.block();
 
     switch(actionType) {
       case UserAction.UPDATE_POINT:
-        console.log('updatePoint');
         this.#pointPresenters.get(update.id).setSaving();
         try {
           await this.#pointModel.updatedPoint(updateType, update);
@@ -107,7 +106,7 @@ export default class TripPresenter {
         break;
     }
 
-    //this.#uiBlocker.unblock();
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
