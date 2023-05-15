@@ -6,6 +6,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import { humanizePointDateAndTime, setDefaultPointDateAndTime } from '../../utils/point.js';
 const DEFAULT_TYPE = POINT_TYPE[0];
 export default class EditPointView extends AbstractStatefulView {
+  #isNewPoint = false;
   #destinations = null;
   #dateFromPicker = null;
   #offers = null;
@@ -29,6 +30,9 @@ export default class EditPointView extends AbstractStatefulView {
     }
     this._setState(EditPointView.parsePointToState(point));
     this.#handleFormSumbit = onFormSubmit;
+    if (!onFormRollup) {
+      this.#isNewPoint = true;
+    }
     this.#handleFormRollup = onFormRollup;
     this.#onDeleteClick = onDeleteClick;
     this._restoreHandlers();
@@ -39,8 +43,8 @@ export default class EditPointView extends AbstractStatefulView {
     return {
       type: DEFAULT_TYPE,
       destination: '',
-      dateFrom: '',
-      dateTo: '',
+      dateFrom: null,
+      dateTo: null,
       isFavorite: false,
       price: '',
       offers: defaultOffers ? defaultOffers.offers : [],
@@ -48,7 +52,7 @@ export default class EditPointView extends AbstractStatefulView {
   }
 
   get template() {
-    return createEditPointTemplate(EditPointView.parseStateToPoint(this._state), this.#destinations);
+    return createEditPointTemplate(this._state, this.#destinations, this.#isNewPoint);
   }
 
   reset(point) {
@@ -73,9 +77,11 @@ export default class EditPointView extends AbstractStatefulView {
       .querySelector('form')
       .addEventListener('submit', this.#formSubmitHandler);
 
-    this.element
-      .querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#formRollupHandler);
+    if (!this.#isNewPoint) {
+      this.element
+        .querySelector('.event__rollup-btn')
+        .addEventListener('click', this.#formRollupHandler);
+    }
 
     this.element
       .querySelector('.event__input--price')
@@ -98,7 +104,7 @@ export default class EditPointView extends AbstractStatefulView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSumbit(this._state);
+    this.#handleFormSumbit(EditPointView.parseStateToPoint(this._state));
   };
 
   #formRollupHandler = (evt) => {
@@ -181,13 +187,20 @@ export default class EditPointView extends AbstractStatefulView {
     );
   }
 
-  static parsePointToState(state) {
-    return { ...state };
+  static parsePointToState(point) {
+    return {
+      ...point,
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false
+    };
   }
 
   static parseStateToPoint(state) {
     const point = { ...state };
-
+    delete point.isDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
     return point;
   }
 }

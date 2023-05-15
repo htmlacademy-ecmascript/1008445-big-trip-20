@@ -2,7 +2,6 @@ import { render, remove } from '../framework/render.js';
 import { UpdateType, UserAction } from '../const.js';
 import { RenderPosition } from '../framework/render.js';
 import EditPointView from '../components/point-edit/point-edit-view.js';
-import { nanoid } from 'nanoid';
 
 export default class NewPointPresenter {
   #destinations = null;
@@ -49,6 +48,25 @@ export default class NewPointPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
+  setAborting() {
+    const resetFromState = () => {
+      this.#editPointComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    this.#editPointComponent.shake(resetFromState);
+  }
+
+  setSaving() {
+    this.#editPointComponent.updateElement({
+      isDisabled: true,
+      isSaving: true
+    });
+  }
+
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.target.key === 'Esc') {
       evt.preventDefault();
@@ -64,8 +82,7 @@ export default class NewPointPresenter {
     this.#handleDataChange(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      { id: nanoid(), ...point }
+      point
     );
-    this.destroy();
   };
 }
