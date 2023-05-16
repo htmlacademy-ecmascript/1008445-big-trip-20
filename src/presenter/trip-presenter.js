@@ -68,8 +68,8 @@ export default class TripPresenter {
     return this.#pointModel.destinations;
   }
 
-  get offers() {
-    return this.#pointModel.offers;
+  get allOffers() {
+    return this.#pointModel.allOffers;
   }
 
   init() {
@@ -148,7 +148,7 @@ export default class TripPresenter {
   createPoint() {
     this.#currentSortType = SortType.DEFAULT;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this.#newPointPresenter.init(this.destinations, this.offers);
+    this.#newPointPresenter.init(this.destinations, this.allOffers);
   }
 
   #renderNoPoint() {
@@ -180,7 +180,7 @@ export default class TripPresenter {
       onDataChange: this.#handleViewAction,
       onModeChange: this.#handleModeChange,
       destinations: this.destinations,
-      offers: this.offers,
+      allOffers: this.allOffers,
     });
 
     pointPresenter.init(point);

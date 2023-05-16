@@ -33,6 +33,7 @@ const UpdateType = {
   MINOR: 'minor',
   MAJOR: 'major',
   INIT: 'init',
+  NOT_RESPONSE: 'not_response'
 };
 
 export { POINT_COUNT, POINT_TYPE, FilterType, SortType, UserAction, UpdateType };

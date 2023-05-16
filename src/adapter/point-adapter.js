@@ -1,8 +1,11 @@
+import { findOfferByType, findDestinationById } from '../utils/point.js';
+
 export default class PointAdapter {
   static adaptToClient(point, destinations, allOffers) {
-    const pointTypeOffers = allOffers.find((offer) => offer.type === point.type);
-    const offers = pointTypeOffers.offers.filter((offer) => point.offers.includes(offer.id));
-    const destination = destinations.find((dest) => dest.id === point.destination);
+    const typeOffers = findOfferByType(point.type, allOffers);
+    const offers = typeOffers.offers.filter((offer) => point.offers.includes(offer.id));
+    const destination = findDestinationById(point.destination, destinations);
+
     const adaptedPoint = {
       ...point,
       dateFrom: point['date_from'] ? new Date(point['date_from']) : point['date_from'],
@@ -17,15 +20,16 @@ export default class PointAdapter {
     delete adaptedPoint['date_to'];
     delete adaptedPoint['is_favorite'];
     delete adaptedPoint['base_price'];
+
     return adaptedPoint;
   }
-
 
   static adaptToSever(point) {
     const destination = point.destination.id;
     const offers = point.offers.map((offer) => offer.id);
     const dateFromISO = point.dateFrom ? (new Date(point.dateFrom)).toISOString() : null;
     const dateToISO = point.dateTo ? (new Date(point.dateTo)).toISOString() : null;
+
     const adaptedPoint = {
       ...point,
       'date_from': dateFromISO,

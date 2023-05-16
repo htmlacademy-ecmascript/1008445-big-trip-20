@@ -1,11 +1,12 @@
 import Observable from '../framework/observable.js';
 import PointAdapter from '../adapter/point-adapter.js';
 import { UpdateType } from '../const.js';
+import Swal from 'sweetalert2';
 
 export default class PointModel extends Observable {
   #points = [];
   #destinations = [];
-  #offers = [];
+  #allOffers = [];
   #pointApiService = null;
 
   get points() {
@@ -16,8 +17,8 @@ export default class PointModel extends Observable {
     return this.#destinations;
   }
 
-  get offers() {
-    return this.#offers;
+  get allOffers() {
+    return this.#allOffers;
   }
 
   constructor({ pointApiService }) {
@@ -29,13 +30,19 @@ export default class PointModel extends Observable {
     try {
       const points = await this.#pointApiService.points;
       this.#destinations = await this.#pointApiService.destinations;
-      this.#offers = await this.#pointApiService.offers;
-      this.#points = points.map((point) => PointAdapter.adaptToClient(point, this.#destinations, this.#offers));
+      this.#allOffers = await this.#pointApiService.allOffers;
+      this.#points = points.map((point) => PointAdapter.adaptToClient(point, this.destinations, this.allOffers));
+      this._notify(UpdateType.INIT);
     } catch (error) {
       this.#points = [];
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong, server is not response! Try to refresh page later',
+        confirmButtonColor: '#078ff0',
+      });
+      this._notify(UpdateType.NOT_RESPONSE);
     }
-
-    this._notify(UpdateType.INIT);
   }
 
   async updatedPoint(updateType, update) {
@@ -46,7 +53,7 @@ export default class PointModel extends Observable {
 
     try {
       const response = await this.#pointApiService.updatePoint(update);
-      const updatedPoint = PointAdapter.adaptToClient(response, this.#destinations, this.#offers);
+      const updatedPoint = PointAdapter.adaptToClient(response, this.destinations, this.allOffers);
 
       this.#points = [
         ...this.#points.slice(0, index),
@@ -63,7 +70,7 @@ export default class PointModel extends Observable {
   async addPoint(updateType, update) {
     try {
       const response = await this.#pointApiService.addPoint(update);
-      const newPoint = PointAdapter.adaptToClient(response, this.#destinations, this.#offers);
+      const newPoint = PointAdapter.adaptToClient(response, this.destinations, this.allOffers);
       this.#points = [
         newPoint,
         ...this.#points

@@ -34,6 +34,8 @@ const sortByDay = (pointA, pointB) => {
 };
 const sortByDurationTime = (pointA, pointB) => getDatesDiff(pointB.dateFrom, pointB.dateTo) - getDatesDiff(pointA.dateFrom, pointA.dateTo);
 const sortByPrice = (pointA, pointB) => pointB.price - pointA.price;
+const findDestinationById = (destinationId, destinations) => destinations.find((destination) => destination.id === destinationId);
+const findOfferByType = (type, allOffers) => allOffers.find((offer) => offer.type === type);
 
 export {
   humanizePointDate,
@@ -48,5 +50,7 @@ export {
   sortByDurationTime,
   sortByPrice,
   setDefaultPointDateAndTime,
-  isDatesEqual
+  isDatesEqual,
+  findDestinationById,
+  findOfferByType,
 };

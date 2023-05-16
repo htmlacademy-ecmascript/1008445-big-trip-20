@@ -5,7 +5,7 @@ import EditPointView from '../components/point-edit/point-edit-view.js';
 
 export default class NewPointPresenter {
   #destinations = null;
-  #offers = null;
+  #allOffers = null;
 
   #pointListContainer = null;
   #handleDataChange = null;
@@ -18,17 +18,17 @@ export default class NewPointPresenter {
     this.#handleDestroy = onDestroy;
   }
 
-  init(destinations, offers) {
+  init(destinations, allOffers) {
     if (this.#editPointComponent) {
       return;
     }
 
     this.#destinations = destinations;
-    this.#offers = offers;
+    this.#allOffers = allOffers;
 
     this.#editPointComponent = new EditPointView({
       destinations: this.#destinations,
-      offers: this.#offers,
+      allOffers: this.#allOffers,
       onFormSubmit: this.#handleFormSubmit,
       onDeleteClick: this.#handleDeleteClick,
     });

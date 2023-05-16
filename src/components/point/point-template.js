@@ -2,23 +2,28 @@ import { humanizePointDate, humanizePointTime, capitalizeFirstLetter } from '../
 import { createOffersListTemplate } from '../offer-list/offer-list-template.js';
 import { getDuration } from '../../utils/point.js';
 
-function createPointTemplate({ type, destination, dateFrom, dateTo, price, offers, isFavorite }) {
-  const typeTitle = capitalizeFirstLetter(type);
-  const date = humanizePointDate(dateFrom);
-  const timeFrom = humanizePointTime(dateFrom);
-  const timeTo = humanizePointTime(dateTo);
+const getPointDuration = (dateFrom, dateTo) => {
   const { dayDuration, hourDuration, minuteDuration } = getDuration(dateFrom, dateTo);
   const pointDayDuration = dayDuration ? `${ dayDuration }D` : '';
   const pointHourDuration = hourDuration ? `${ hourDuration }H` : '';
   const pointMinuteDuration = minuteDuration ? `${ minuteDuration }M` : '';
-  const duration = `${ pointDayDuration } ${ pointHourDuration } ${ pointMinuteDuration }`;
+  return `${ pointDayDuration } ${ pointHourDuration } ${ pointMinuteDuration }`;
+};
+
+function createPointTemplate({ type, destination, dateFrom, dateTo, price, offers, isFavorite }) {
+  const typeTitle = capitalizeFirstLetter(type);
+  const dateTag = dateFrom.toLocaleDateString('en-US');
+  const date = humanizePointDate(dateFrom);
+  const timeFrom = humanizePointTime(dateFrom);
+  const timeTo = humanizePointTime(dateTo);
+  const duration = getPointDuration(dateFrom, dateTo);
   const favoriteClassName = isFavorite ? 'event__favorite-btn--active' : '';
   const offerListTemplate = offers ? createOffersListTemplate(offers) : '';
   const { name } = destination;
 
   return /*html*/`<li class="trip-events__item">
   <div class="event">
-    <time class="event__date" datetime="2019-03-18">${ date }</time>
+    <time class="event__date" datetime="${ dateTag }">${ date }</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src='img/icons/${ type }.png' alt="Event type icon">
     </div>

@@ -1,5 +1,5 @@
-import ApiService from './framework/api-service.js';
-import PointAdapter from './adapter/point-adapter.js';
+import ApiService from '../framework/api-service.js';
+import PointAdapter from '../adapter/point-adapter.js';
 
 const Method = {
   GET: 'GET',
@@ -17,7 +17,7 @@ export default class PointApiService extends ApiService {
     return this._load({ url: 'destinations' }).then(ApiService.parseResponse);
   }
 
-  get offers() {
+  get allOffers() {
     return this._load({ url: 'offers' }).then(ApiService.parseResponse);
   }
 
