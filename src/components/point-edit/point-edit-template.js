@@ -3,15 +3,23 @@ import { createDestinationSectionTemplate } from './pictures-template.js';
 import { createOffersSectionTemplate } from './offers-list-template.js';
 import { createDistinationTempate } from './destination-template.js';
 import { createPointTypeListTemplate } from './point-items-template.js';
-const buttonRollup = `<button class="event__rollup-btn" type="button">
-  <span class="visually-hidden">Open event</span>
+import { findOfferByType } from '../../utils/point.js';
+
+const createButtonRollupTemplate = () =>
+  `<button class="event__rollup-btn" type="button">
+    <span class="visually-hidden">Open event</span>
   </button>`;
 
-function createEditPointTemplate({ type, destination, dateFrom, dateTo, price, offers, isDisabled, isSaving, isDeleting }, destinations, isNewPoint) {
+function createEditPointTemplate({ type, destination, dateFrom, dateTo, price, offers, isDisabled, isSaving, isDeleting }, destinations, allOffers, isNewPoint) {
+  let destinationName = '';
   let destinationSectionTemplate = '';
   let offersSectionTemplate = '';
-  let destinationName = '';
   let deleteButtonTitle = '';
+  const typeOffers = findOfferByType(type, allOffers);
+  const checkedTypeOffers = typeOffers.offers.map((typeOffer) => ({
+    ...typeOffer,
+    isChecked: !!offers.find((offer) => offer.id === typeOffer.id)
+  }));
   const typeTitle = capitalizeFirstLetter(type);
   const pointTypeListTemplate = createPointTypeListTemplate();
   if (destination) {
@@ -20,10 +28,11 @@ function createEditPointTemplate({ type, destination, dateFrom, dateTo, price, o
     destinationSectionTemplate = createDestinationSectionTemplate(description, pictures);
   }
   const pointDestinationTemplate = createDistinationTempate(destinationName, destinations, isDisabled);
-  if (offers.length) {
-    offersSectionTemplate = createOffersSectionTemplate(offers);
+  if (checkedTypeOffers.length) {
+
+    offersSectionTemplate = createOffersSectionTemplate(checkedTypeOffers);
   }
-  const buttonRollupTemplate = !isNewPoint ? buttonRollup : '';
+  const buttonRollupTemplate = !isNewPoint ? createButtonRollupTemplate() : '';
   if (isNewPoint) {
     deleteButtonTitle = 'Cancel';
   } else {

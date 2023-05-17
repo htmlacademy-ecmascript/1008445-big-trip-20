@@ -1,7 +1,14 @@
-const createOfferTemplate = ({ title, price }) => {
+const createOfferTemplate = ({ id, title, price, isChecked }) => {
   const checkBoxDataTitle = title.split(' ').map((word) => word.toLowerCase()).join('-');
   return /*html*/`<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${ checkBoxDataTitle }-1" type="checkbox" name="event-offer-${ checkBoxDataTitle }">
+    <input
+      class="event__offer-checkbox  visually-hidden"
+      id="event-offer-${ checkBoxDataTitle }-1"
+      type="checkbox"
+      name="event-offer-${ checkBoxDataTitle }"
+      ${ isChecked ? 'checked' : ''}
+      data-id="${ id }"
+    >
     <label class="event__offer-label" for="event-offer-${ checkBoxDataTitle }-1">
       <span class="event__offer-title">${ title }</span>
       &plus;&euro;&nbsp;
@@ -9,10 +16,10 @@ const createOfferTemplate = ({ title, price }) => {
     </label>
   </div>`;
 };
-const createOffersTemplate = (offers) => offers.map((offer) => createOfferTemplate(offer)).join('');
-const createOffersSectionTemplate = (offers) => /*html*/`<section class="event__section  event__section--offers">
+const createOffersTemplate = (checkedTypeOffers) => checkedTypeOffers.map((typeOffer) => createOfferTemplate(typeOffer)).join('');
+const createOffersSectionTemplate = (checkedTypeOffers) => /*html*/`<section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-    <div class="event__available-offers">${ createOffersTemplate(offers) }</div>
+    <div class="event__available-offers">${ createOffersTemplate(checkedTypeOffers) }</div>
   </section>`;
 
 export { createOffersSectionTemplate };
