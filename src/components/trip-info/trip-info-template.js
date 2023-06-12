@@ -1,7 +1,7 @@
 import { humanizePointDate } from '../../utils/point';
 import dayjs from 'dayjs';
 
-function createTripInfoTemplate(totalPrice, destinationTitle, { dateFrom, dateTo }) {
+const createTripInfoTemplate = (totalPrice, destinationTitle, { dateFrom, dateTo }) => {
   let tripDurationTitle = '';
   if (dateFrom && dateTo) {
     const startDate = dayjs(dateFrom), endDate = dayjs(dateTo);
@@ -21,6 +21,6 @@ function createTripInfoTemplate(totalPrice, destinationTitle, { dateFrom, dateTo
     Total: &euro;&nbsp;<span class="trip-info__cost-value">${ totalPrice }</span>
   </p>
 </section>`;
-}
+};
 
 export { createTripInfoTemplate };

@@ -13,13 +13,11 @@ const createSortItemTemplate = (sortType, isChecked) => `<div class="trip-sort__
     >
     <label class="trip-sort__btn" for="sort-${ sortType }">${ sortType }</label>
   </div>`;
-
-
-function createSortTemplate(currentSortType) {
+const createSortTemplate = (currentSortType) => {
   const sortItems = Object.values(SortType).map((sortItem) => createSortItemTemplate(sortItem, sortItem === currentSortType)).join('');
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
     ${ sortItems }
   </form>`;
-}
+};
 
 export { createSortTemplate };

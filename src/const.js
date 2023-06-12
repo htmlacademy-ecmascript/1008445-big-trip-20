@@ -1,4 +1,3 @@
-const POINT_COUNT = 5;
 const POINT_TYPE = [
   'taxi',
   'bus',
@@ -35,5 +34,13 @@ const UpdateType = {
   INIT: 'init',
   NOT_RESPONSE: 'not_response'
 };
+const EditType = {
+  EDITING: 'editing',
+  CREATING: 'creating'
+};
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000
+};
 
-export { POINT_COUNT, POINT_TYPE, FilterType, SortType, UserAction, UpdateType };
+export { POINT_TYPE, FilterType, SortType, UserAction, UpdateType, EditType, TimeLimit };

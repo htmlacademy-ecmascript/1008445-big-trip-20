@@ -3,13 +3,13 @@ import AbstractView from '../../framework/view/abstract-view.js';
 import { UpdateType } from '../../const.js';
 
 export default class newPointButtonView extends AbstractView {
-  #handleClick = null;
+  #handleSaveClick = null;
   #pointModel = null;
 
-  constructor({ onClick, pointModel}) {
+  constructor({ onSave, pointModel}) {
     super();
     this.#pointModel = pointModel;
-    this.#handleClick = onClick;
+    this.#handleSaveClick = onSave;
     this.element.addEventListener('click', this.#clickHandler);
     this.#pointModel.addObserver(this.#handleModelEvent);
   }
@@ -20,10 +20,14 @@ export default class newPointButtonView extends AbstractView {
 
   #clickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleClick();
+    this.#handleSaveClick();
   };
 
   #handleModelEvent = (updateType) => {
-    this.element.disabled = updateType === UpdateType.NOT_RESPONSE;
+    this.setDisabled(updateType === UpdateType.NOT_RESPONSE);
+  };
+
+  setDisabled = (isDisabled) => {
+    this.element.disabled = isDisabled;
   };
 }

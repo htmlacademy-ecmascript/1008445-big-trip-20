@@ -7,10 +7,9 @@ const NoPointTextType = {
   [ FilterType.PRESENT ]: 'There are no present events now',
   [ FilterType.FUTURE ]: 'There are no future events now',
 };
-
-function createNoPointTemplate(filterType) {
+const createNoPointTemplate = (filterType) => {
   const noPointTextValue = NoPointTextType[ filterType ];
   return `<p class="trip-events__msg">${ noPointTextValue }</p>`;
-}
+};
 
 export { createNoPointTemplate };

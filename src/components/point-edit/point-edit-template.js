@@ -4,13 +4,14 @@ import { createOffersSectionTemplate } from './offers-list-template.js';
 import { createDistinationTempate } from './destination-template.js';
 import { createPointTypeListTemplate } from './point-items-template.js';
 import { findOfferByType } from '../../utils/point.js';
+import { EditType } from '../../const.js';
 
 const createButtonRollupTemplate = () =>
   `<button class="event__rollup-btn" type="button">
     <span class="visually-hidden">Open event</span>
   </button>`;
 
-function createEditPointTemplate({ type, destination, dateFrom, dateTo, price, offers, isDisabled, isSaving, isDeleting }, destinations, allOffers, isNewPoint) {
+const createEditPointTemplate = ({ type, destination, dateFrom, dateTo, price, offers, isDisabled, isSaving, isDeleting }, destinations, allOffers, editType) => {
   let destinationName = '';
   let destinationSectionTemplate = '';
   let offersSectionTemplate = '';
@@ -32,8 +33,8 @@ function createEditPointTemplate({ type, destination, dateFrom, dateTo, price, o
 
     offersSectionTemplate = createOffersSectionTemplate(checkedTypeOffers);
   }
-  const buttonRollupTemplate = !isNewPoint ? createButtonRollupTemplate() : '';
-  if (isNewPoint) {
+  const buttonRollupTemplate = editType === EditType.EDITING ? createButtonRollupTemplate() : '';
+  if (editType === EditType.CREATING) {
     deleteButtonTitle = 'Cancel';
   } else {
     deleteButtonTitle = isDeleting ? 'Deleting...' : 'Delete';
@@ -91,6 +92,6 @@ function createEditPointTemplate({ type, destination, dateFrom, dateTo, price, o
       </section>
     </form>
     </li>`;
-}
+};
 
 export { createEditPointTemplate };
