@@ -10,7 +10,7 @@ const getPointDuration = (dateFrom, dateTo) => {
   return `${ pointDayDuration } ${ pointHourDuration } ${ pointMinuteDuration }`;
 };
 
-function createPointTemplate({ type, destination, dateFrom, dateTo, price, offers, isFavorite }) {
+const createPointTemplate = ({ type, destination, dateFrom, dateTo, price, offers, isFavorite }) => {
   const typeTitle = capitalizeFirstLetter(type);
   const dateTag = dateFrom.toLocaleDateString('en-US');
   const date = humanizePointDate(dateFrom);
@@ -52,6 +52,6 @@ function createPointTemplate({ type, destination, dateFrom, dateTo, price, offer
     </button>
   </div>
 </li>`;
-}
+};
 
 export { createPointTemplate };

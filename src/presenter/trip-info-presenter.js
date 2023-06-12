@@ -1,7 +1,7 @@
 import { render, replace, remove } from '../framework/render.js';
 import { RenderPosition } from '../framework/render.js';
 import TripInfoView from '../components/trip-info/trip-info-view.js';
-
+const MAX_POINT_TITLE_COUNT = 3;
 export default class TripInfoPresenter {
   #tripInfoContainer = null;
   #tripInfoComponent = null;
@@ -28,8 +28,10 @@ export default class TripInfoPresenter {
     if (!points.length) {
       return '';
     }
-    if (points.length > 3) {
-      return `${ points[0].destination.name } ... ${ points[points.length - 1].destination.name }`;
+    if (points.length > MAX_POINT_TITLE_COUNT) {
+      const startPoint = points[0];
+      const endPoint = points[ points.length - 1 ];
+      return `${ startPoint.destination.name } &mdash; ... &mdash; ${ endPoint.destination.name }`;
     } else {
       return points.map((point) => point.destination.name).join(' &mdash; ');
     }
@@ -46,7 +48,7 @@ export default class TripInfoPresenter {
       return { dateFrom, dateTo };
     } else {
       const { dateFrom } = points[0];
-      const { dateTo } = points[points.length - 1];
+      const { dateTo } = points[ points.length - 1 ];
       return { dateFrom, dateTo };
     }
   }

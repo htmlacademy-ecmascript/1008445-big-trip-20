@@ -35,6 +35,8 @@ export default class PointModel extends Observable {
       this._notify(UpdateType.INIT);
     } catch (error) {
       this.#points = [];
+      this.#destinations = [];
+      this.#allOffers = [];
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
