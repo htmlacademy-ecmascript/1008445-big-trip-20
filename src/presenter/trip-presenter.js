@@ -79,6 +79,85 @@ export default class TripPresenter {
     this.#renderTrip();
   }
 
+  #renderNoPointMessage() {
+    this.#noPointComponent = new NoPointView({
+      filterType: this.#filterType
+    });
+    render(this.#noPointComponent, this.#tripBodyContainer);
+  }
+
+  #renderNewPointButton() {
+    this.#newPointButtonComponent = new newPointButtonView({
+      onSave: this.#handleNewPointSaveButtonClick,
+      pointModel: this.#pointModel
+    });
+
+    render(this.#newPointButtonComponent, this.#tripInfoContainer, RenderPosition.BEFOREEND);
+  }
+
+  #renderSort() {
+    this.#sortComponent = new SortView({
+      currentSortType: this.#currentSortType,
+      onSortTypeChange: this.#handleSortTypeChange
+    });
+    render(this.#sortComponent, this.#tripBodyContainer);
+  }
+
+  #renderPointList() {
+    render(this.#pointListComponent, this.#tripBodyContainer);
+  }
+
+  #renderPoints() {
+    this.points.forEach((point) => this.#renderPoint(point));
+  }
+
+  #renderPoint(point) {
+    const pointPresenter = new PointPresenter({
+      pointListContainer: this.#pointListComponent.element,
+      onDataChange: this.#handleViewAction,
+      onModeChange: this.#handleModeChange,
+      destinations: this.destinations,
+      allOffers: this.allOffers,
+    });
+
+    pointPresenter.init(point);
+    this.#pointPresenters.set(point.id, pointPresenter);
+  }
+
+  #renderLoading() {
+    render(this.#loadingComponent, this.#tripBodyContainer);
+  }
+
+  #renderTrip() {
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
+    if (!this.points.length && !this.#isCreating) {
+      this.#renderNoPointMessage();
+      return;
+    }
+    this.#renderSort();
+    this.#renderPointList();
+    this.#renderPoints();
+  }
+
+  #clearTrip({ resetSortType = false } = {}) {
+    this.#newPointPresenter.destroy();
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+
+    remove(this.#sortComponent);
+    remove(this.#loadingComponent);
+    if (this.#noPointComponent) {
+      remove(this.#noPointComponent);
+    }
+
+    if (resetSortType) {
+      this.#currentSortType = SortType.DEFAULT;
+    }
+  }
+
   #handleViewAction = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
 
@@ -166,84 +245,4 @@ export default class TripPresenter {
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init(this.destinations, this.allOffers);
   };
-
-  #renderNoPointMessage() {
-    this.#noPointComponent = new NoPointView({
-      filterType: this.#filterType
-    });
-    render(this.#noPointComponent, this.#tripBodyContainer);
-  }
-
-  #renderNewPointButton() {
-    this.#newPointButtonComponent = new newPointButtonView({
-      onSave: this.#handleNewPointSaveButtonClick,
-      pointModel: this.#pointModel
-    });
-
-    render(this.#newPointButtonComponent, this.#tripInfoContainer, RenderPosition.BEFOREEND);
-  }
-
-  #renderSort() {
-    this.#sortComponent = new SortView({
-      currentSortType: this.#currentSortType,
-      onSortTypeChange: this.#handleSortTypeChange
-    });
-    render(this.#sortComponent, this.#tripBodyContainer);
-  }
-
-  #renderPointList() {
-    render(this.#pointListComponent, this.#tripBodyContainer);
-  }
-
-  #renderPoints() {
-    this.points.forEach((point) => this.#renderPoint(point));
-  }
-
-  #renderPoint(point) {
-    const pointPresenter = new PointPresenter({
-      pointListContainer: this.#pointListComponent.element,
-      onDataChange: this.#handleViewAction,
-      onModeChange: this.#handleModeChange,
-      destinations: this.destinations,
-      allOffers: this.allOffers,
-    });
-
-    pointPresenter.init(point);
-    this.#pointPresenters.set(point.id, pointPresenter);
-  }
-
-  #renderLoading() {
-    render(this.#loadingComponent, this.#tripBodyContainer);
-  }
-
-  #renderTrip() {
-    if (this.#isLoading) {
-      this.#renderLoading();
-      return;
-    }
-    if (!this.points.length && !this.#isCreating) {
-      this.#renderNoPointMessage();
-      return;
-    }
-    this.#renderSort();
-    this.#renderPointList();
-    this.#renderPoints();
-  }
-
-
-  #clearTrip({ resetSortType = false } = {}) {
-    this.#newPointPresenter.destroy();
-    this.#pointPresenters.forEach((presenter) => presenter.destroy());
-    this.#pointPresenters.clear();
-
-    remove(this.#sortComponent);
-    remove(this.#loadingComponent);
-    if (this.#noPointComponent) {
-      remove(this.#noPointComponent);
-    }
-
-    if (resetSortType) {
-      this.#currentSortType = SortType.DEFAULT;
-    }
-  }
 }

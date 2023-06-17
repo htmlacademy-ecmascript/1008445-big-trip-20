@@ -9,6 +9,11 @@ export default class PointModel extends Observable {
   #allOffers = [];
   #pointApiService = null;
 
+  constructor({ pointApiService }) {
+    super();
+    this.#pointApiService = pointApiService;
+  }
+
   get points() {
     return this.#points;
   }
@@ -19,11 +24,6 @@ export default class PointModel extends Observable {
 
   get allOffers() {
     return this.#allOffers;
-  }
-
-  constructor({ pointApiService }) {
-    super();
-    this.#pointApiService = pointApiService;
   }
 
   async init() {

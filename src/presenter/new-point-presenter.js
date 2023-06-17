@@ -1,7 +1,7 @@
 import { render, remove } from '../framework/render.js';
 import { UpdateType, UserAction } from '../const.js';
 import { RenderPosition } from '../framework/render.js';
-import EditPointView from '../components/point-edit/point-edit-view.js';
+import PointEditView from '../components/point-edit/point-edit-view.js';
 
 export default class NewPointPresenter {
   #editType = null;
@@ -28,7 +28,7 @@ export default class NewPointPresenter {
     this.#destinations = destinations;
     this.#allOffers = allOffers;
 
-    this.#editPointComponent = new EditPointView({
+    this.#editPointComponent = new PointEditView({
       destinations: this.#destinations,
       allOffers: this.#allOffers,
       onFormSubmit: this.#handleFormSubmit,

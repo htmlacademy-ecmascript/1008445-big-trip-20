@@ -2,6 +2,9 @@ import dayjs from 'dayjs';
 const DATE_FORMAT = 'MMM D';
 const TIME_FORMAT = 'HH:mm';
 const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
+const MINUTES_IN_HOUR = 60;
+const HOURS_IN_DAY = 24;
+const RADIX = 10;
 
 const humanizePointDate = (date) => date ? dayjs(date).format(DATE_FORMAT) : '';
 const humanizePointTime = (date) => date ? dayjs(date).format(TIME_FORMAT) : '';
@@ -13,10 +16,10 @@ const isPresentPoint = (date) => date && dayjs().isSame(date, 'D');
 const getDatesDiff = (dateFrom, dateTo, timeUnit) => timeUnit ? dayjs(dateTo).diff(dayjs(dateFrom), timeUnit) : dayjs(dateTo).diff(dayjs(dateFrom));
 const getDuration = (dateFrom, dateTo) => {
   const minutes = getDatesDiff(dateFrom, dateTo, 'minute');
-  let hourDuration = parseInt(minutes / 60, 10);
-  const dayDuration = parseInt(hourDuration / 24, 10);
+  let hourDuration = parseInt(minutes / MINUTES_IN_HOUR, RADIX);
+  const dayDuration = parseInt(hourDuration / HOURS_IN_DAY, RADIX);
   if (dayDuration) {
-    hourDuration = hourDuration - dayDuration * 24;
+    hourDuration = hourDuration - dayDuration * HOURS_IN_DAY;
   }
   const minuteDuration = dayjs().minute(minutes).$m;
   return { dayDuration, hourDuration, minuteDuration };

@@ -15,7 +15,7 @@ const EMPTY_POINT = {
   offers: []
 };
 
-export default class EditPointView extends AbstractStatefulView {
+export default class PointEditView extends AbstractStatefulView {
   #editType = null;
   #destinations = null;
   #dateFromPicker = null;
@@ -38,7 +38,7 @@ export default class EditPointView extends AbstractStatefulView {
     super();
     this.#destinations = destinations;
     this.#allOffers = allOffers;
-    this._setState(EditPointView.parsePointToState(point));
+    this._setState(PointEditView.parsePointToState(point));
     this.#handleFormSumbit = onFormSubmit;
     this.#editType = editType;
     this.#handleFormRollup = onFormRollup;
@@ -52,7 +52,7 @@ export default class EditPointView extends AbstractStatefulView {
   }
 
   reset(point) {
-    this.updateElement(EditPointView.parsePointToState(point));
+    this.updateElement(PointEditView.parsePointToState(point));
   }
 
   removeElement() {
@@ -76,34 +76,34 @@ export default class EditPointView extends AbstractStatefulView {
     if (this.#editType === EditType.EDITING) {
       this.element
         .querySelector('.event__rollup-btn')
-        .addEventListener('click', this.#formRollupHandler);
+        .addEventListener('click', this.#formRollupClickHandler);
 
       this.element
         .querySelector('.event__reset-btn')
-        .addEventListener('click', this.#deleteHandler);
+        .addEventListener('click', this.#deleteClickHandler);
     }
 
     if (this.#editType === EditType.CREATING) {
       this.element
         .querySelector('.event__reset-btn')
-        .addEventListener('click', this.#resetHandler);
+        .addEventListener('click', this.#resetClickHandler);
     }
     this.element
       .querySelector('.event__input--price')
-      .addEventListener('input', this.#priceHandler);
+      .addEventListener('input', this.#priceChangeHandler);
 
     this.element
       .querySelector('.event__type-group')
-      .addEventListener('click', this.#pointTypeHandler);
+      .addEventListener('click', this.#pointTypeClickHandler);
 
     this.element
       .querySelector('.event__input--destination')
-      .addEventListener('change', this.#destinationHandler);
+      .addEventListener('change', this.#destinationChangeHandler);
 
 
     const availableOffersElement = this.element.querySelector('.event__available-offers');
     if (availableOffersElement) {
-      availableOffersElement.addEventListener('click', this.#offersHandler);
+      availableOffersElement.addEventListener('click', this.#offerClickHandler);
     }
 
     this.#setDatePicker();
@@ -111,15 +111,15 @@ export default class EditPointView extends AbstractStatefulView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSumbit(EditPointView.parseStateToPoint(this._state));
+    this.#handleFormSumbit(PointEditView.parseStateToPoint(this._state));
   };
 
-  #formRollupHandler = (evt) => {
+  #formRollupClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleFormRollup(evt);
   };
 
-  #offersHandler = (evt) => {
+  #offerClickHandler = (evt) => {
     if (evt.target.matches('.event__offer-checkbox')) {
       const offerId = evt.target.dataset.id;
       const typeOffers = findOfferByType(this._state.type, this.#allOffers);
@@ -132,7 +132,7 @@ export default class EditPointView extends AbstractStatefulView {
     }
   };
 
-  #priceHandler = (evt) => {
+  #priceChangeHandler = (evt) => {
     evt.preventDefault();
     const value = evt.target.value;
     if (value) {
@@ -141,17 +141,17 @@ export default class EditPointView extends AbstractStatefulView {
     this._setState({ price: evt.target.value });
   };
 
-  #deleteHandler = (evt) => {
+  #deleteClickHandler = (evt) => {
     evt.preventDefault();
-    this.#onDeleteClick(EditPointView.parseStateToPoint(this._state));
+    this.#onDeleteClick(PointEditView.parseStateToPoint(this._state));
   };
 
-  #resetHandler = (evt) => {
+  #resetClickHandler = (evt) => {
     evt.preventDefault();
     this.#onCancelClick();
   };
 
-  #pointTypeHandler = (evt) => {
+  #pointTypeClickHandler = (evt) => {
     evt.preventDefault();
     if (evt.target.matches('.event__type-label')) {
       // eslint-disable-next-line no-unused-vars
@@ -163,7 +163,7 @@ export default class EditPointView extends AbstractStatefulView {
     }
   };
 
-  #destinationHandler = (evt) => {
+  #destinationChangeHandler = (evt) => {
     let destination = this.#destinations.find(({ name }) => evt.target.value === name);
     if (!destination) {
       evt.target.value = '';

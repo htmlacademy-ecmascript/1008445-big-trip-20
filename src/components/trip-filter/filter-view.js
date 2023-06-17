@@ -1,4 +1,4 @@
-import { createFilterTemplate } from './trip-filter-template.js';
+import { createFilterTemplate } from './filter-template.js';
 import AbstractView from '../../framework/view/abstract-view.js';
 
 export default class FilterView extends AbstractView {
