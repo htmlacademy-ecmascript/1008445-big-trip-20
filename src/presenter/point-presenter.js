@@ -1,5 +1,5 @@
 import { render, replace, remove } from '../framework/render.js';
-import EditPointView from '../components/point-edit/point-edit-view.js';
+import PointEditView from '../components/point-edit/point-edit-view.js';
 import PointView from '../components/point/point-view.js';
 import { UserAction, UpdateType } from '../const.js';
 import { isDatesEqual } from '../utils/point.js';
@@ -40,7 +40,7 @@ export default class PointPresenter {
       onFavoriteClick: this.#handleFavoriteClick
     });
 
-    this.#editPointComponent = new EditPointView({
+    this.#editPointComponent = new PointEditView({
       point: this.#point,
       destinations: this.#destinations,
       allOffers: this.#allOffers,

@@ -74,12 +74,12 @@ export default class TripInfoPresenter {
     remove(prevTripInfoComponent);
   }
 
-  #handleModelEvent = () => {
-    this.init();
-  };
-
   #getTotalOffersPrice(offers) {
     // eslint-disable-next-line no-return-assign
     return offers ? offers.reduce((totalOfferPrice, { price }) => totalOfferPrice += price, 0) : 0;
   }
+
+  #handleModelEvent = () => {
+    this.init();
+  };
 }

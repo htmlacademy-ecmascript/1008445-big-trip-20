@@ -10,7 +10,7 @@ export default class newPointButtonView extends AbstractView {
     super();
     this.#pointModel = pointModel;
     this.#handleSaveClick = onSave;
-    this.element.addEventListener('click', this.#clickHandler);
+    this.element.addEventListener('click', this.#addNewPointClickHandler);
     this.#pointModel.addObserver(this.#handleModelEvent);
   }
 
@@ -18,7 +18,7 @@ export default class newPointButtonView extends AbstractView {
     return createNewPointButtonTemplate();
   }
 
-  #clickHandler = (evt) => {
+  #addNewPointClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleSaveClick();
   };
